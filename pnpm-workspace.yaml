@@ -6,4 +6,6 @@ packages:
 # This tells pnpm that the projects inside these directories belong to the same workspace.
   
 allowBuilds:
+  '@prisma/engines': true
   esbuild: true
+  prisma: false

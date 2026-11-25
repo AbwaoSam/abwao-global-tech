@@ -30,3 +30,11 @@ coverage/
 
 # Prisma
 prisma/*.db
+
+# Local AI coding assistant configurations
+apps/api/.agents/
+apps/api/.claude/
+apps/api/.windsurf/
+
+# Prisma generated client
+apps/api/src/generated/prisma/
