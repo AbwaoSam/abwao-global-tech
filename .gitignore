@@ -38,3 +38,6 @@ apps/api/.windsurf/
 
 # Prisma generated client
 apps/api/src/generated/prisma/
+
+# Local Prisma skills metadata
+apps/api/skills-lock.json
