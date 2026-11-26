@@ -17,17 +17,9 @@ export const createUserController = async (
   next: NextFunction
 ) => {
   try {
-    const validation = createUserSchema.safeParse(req.body);
+    const validatedData = createUserSchema.parse(req.body);
 
-    if (!validation.success) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid user data",
-        errors: validation.error.flatten(),
-      });
-    }
-
-    const user = await createUser(validation.data);
+    const user = await createUser(validatedData);
 
     return res.status(201).json({
       success: true,
@@ -86,19 +78,11 @@ export const updateUserController = async (
   next: NextFunction
 ) => {
   try {
-    const validation = updateUserSchema.safeParse(req.body);
-
-    if (!validation.success) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid update data",
-        errors: validation.error.flatten(),
-      });
-    }
+    const validatedData = updateUserSchema.parse(req.body);
 
     const user = await updateUser(
       req.params.id as string,
-      validation.data
+      validatedData
     );
 
     return res.status(200).json({

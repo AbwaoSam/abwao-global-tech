@@ -3,9 +3,18 @@ import cors from "cors";
 import helmet from "helmet";
 import prisma from "./config/prisma";
 import v1Router from "./routes/v1";
+import pinoHttp from "pino-http";
+import logger from "./config/logger";
 import { errorMiddleware } from "./common/middleware/error.middleware";
 
 const app = express();
+
+app.use(
+  pinoHttp({
+    logger,
+    autoLogging: true,
+  })
+);
 
 app.use(helmet());
 
@@ -37,7 +46,10 @@ app.get("/api/health/database", async (_req, res) => {
       database: "PostgreSQL",
     });
   } catch (error) {
-    console.error("Database health check failed:", error);
+    logger.error(
+      { err: error },
+      "Database health check failed"
+    );
 
     res.status(500).json({
       success: false,
