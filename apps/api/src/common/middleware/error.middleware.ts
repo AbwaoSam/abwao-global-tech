@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { Prisma } from "../../generated/prisma/client";
+import { AppError } from "../errors/app-error";
 import { ZodError } from "zod";
 import logger from "../../config/logger";
 
@@ -9,6 +10,24 @@ export const errorMiddleware = (
   res: Response,
   _next: NextFunction
 ) => {
+  // Operational application errors
+  if (error instanceof AppError) {
+    logger.warn(
+      {
+        method: req.method,
+        url: req.originalUrl,
+        statusCode: error.statusCode,
+        message: error.message,
+      },
+      "Application error"
+    );
+
+    return res.status(error.statusCode).json({
+      success: false,
+      message: error.message,
+    });
+  }
+
   // Zod validation errors
   if (error instanceof ZodError) {
     logger.warn(
